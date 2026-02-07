@@ -1,0 +1,3 @@
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Can't handle the 8 and 9 script logic altogether. 8 applies the color to code and 9 generates proper tables. 9 is not making the output of the script visible.

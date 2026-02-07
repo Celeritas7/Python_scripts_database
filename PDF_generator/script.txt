@@ -1,0 +1,68 @@
+Sub FinalNotebookFormatter_Fixed()
+    Dim tbl As Table
+    Dim ishp As InlineShape
+    Dim doc As Document
+    Dim styleH2 As Style
+    
+    Set doc = ActiveDocument
+    
+    ' 1. Set Page Margins to Narrow (0.5 inches)
+    With doc.PageSetup
+        .TopMargin = InchesToPoints(0.5)
+        .BottomMargin = InchesToPoints(0.5)
+        .LeftMargin = InchesToPoints(0.5)
+        .RightMargin = InchesToPoints(0.5)
+    End With
+
+    ' 2. Format All Tables to "Grid Table 4" (Cambria, 11pt)
+    For Each tbl In doc.Tables
+        With tbl
+            .Style = "Grid Table 4"
+            .Range.Font.Name = "Cambria"
+            .Range.Font.Size = 11
+            .ApplyStyleHeadingRows = True
+            .ApplyStyleRowBands = True
+            .AutoFitBehavior (wdAutoFitWindow)
+            .Rows.Alignment = wdAlignRowCenter
+            .Range.Cells.VerticalAlignment = wdCellAlignVerticalCenter
+            .Range.ParagraphFormat.Alignment = wdAlignParagraphCenter
+        End With
+    Next tbl
+    
+    ' 3. Process Images (Lock Aspect, Center, Scale 70%)
+    For Each ishp In doc.InlineShapes
+        With ishp
+            .LockAspectRatio = msoTrue
+            .ScaleHeight = 70
+            .ScaleWidth = 70
+            .Range.ParagraphFormat.Alignment = wdAlignParagraphCenter
+        End With
+    Next ishp
+
+    ' 4. Update Heading 2 Style Paragraph Formatting
+    On Error Resume Next
+    Set styleH2 = doc.Styles(wdStyleHeading2)
+    On Error GoTo 0
+    
+    If Not styleH2 Is Nothing Then
+        With styleH2.ParagraphFormat
+            .Alignment = wdAlignParagraphLeft
+            .OutlineLevel = wdOutlineLevel2
+            
+            ' Indentation: Set Left to 1 cm
+            .LeftIndent = CentimetersToPoints(1)
+            .RightIndent = CentimetersToPoints(0)
+            
+            ' Spacing: 10pt Before, 0pt After
+            .SpaceBefore = 10
+            .SpaceAfter = 0
+            .LineSpacingRule = wdLineSpaceSingle
+            
+            ' Grid settings
+            .AutoAdjustRightIndent = True
+            .SnapToGrid = True
+        End With
+    End If
+
+    MsgBox "Formatting Complete: Margins, Tables, Images, and Heading 2 updated!", vbInformation
+End Sub
