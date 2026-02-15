@@ -1022,6 +1022,10 @@ Examples:
     # If no input provided, auto-batch convert all .ipynb in script's directory
     if not args.input:
         script_dir = Path(__file__).parent.resolve()
+        work_dir = Path.cwd()
+        if work_dir != script_dir:
+            script_dir = work_dir
+
         print(f"No input specified. Auto-converting all .ipynb files in: {script_dir}")
         print("=" * 60)
         batch_convert(
